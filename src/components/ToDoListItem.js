@@ -8,29 +8,30 @@ export default function ToDoListItem({ header }) {
   ).status;
   const dispatch = useDispatch();
   const [status, setStatus] = useState(initialStatus);
+  const [checkbox, setCheckbox] = useState(initialStatus === "done");
   const onChangeStatus = (event) => {
-    event.preventDefault();
+    const newStatus = event.target.value;
 
-    setStatus(event.target.value);
+    setStatus(newStatus);
+    setCheckbox(newStatus === "done" ? true : false);
 
     dispatch(
       updateStatus({
         header: header,
-        status: status,
+        status: newStatus,
       })
     );
   };
   const onChangeCheckbox = (event) => {
-    event.preventDefault();
-    const currentStatus = event.target.checked;
-    const newStatus = (checked) => {
-      return checked ? "to do" : "done";
-    };
+    const newStatus = event.target.checked ? "done" : "to do";
+
+    setStatus(newStatus);
+    setCheckbox(newStatus === "done" ? true : false);
 
     dispatch(
       updateStatus({
         header: header,
-        status: newStatus(currentStatus),
+        status: newStatus,
       })
     );
   };
@@ -39,16 +40,11 @@ export default function ToDoListItem({ header }) {
     <li>
       <input
         type="checkbox"
-        checked={status === "done"}
+        checked={checkbox}
         onChange={(event) => onChangeCheckbox(event)}
       ></input>
       {header}
-      <select
-        name="status"
-        id="status"
-        value={status}
-        onChange={(event) => onChangeStatus(event)}
-      >
+      <select onChange={(event) => onChangeStatus(event)}>
         <option value="in progress" selected={status === "in progress"}>
           in progress
         </option>
