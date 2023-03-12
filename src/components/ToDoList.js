@@ -1,19 +1,40 @@
-import React from "react";
-import ToDoItem from "./ToDoItem";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addItem } from "../features/list/listSlice";
+import ToDoListItem from "./ToDoListItem";
 
 export default function ToDoList() {
-  const items = [
-    { id: 1, header: "Grocery", status: "done" },
-    { id: 2, header: "Reading", status: "in progress" },
-    { id: 3, header: "Meditation", status: "to do" },
-    { id: 4, header: "Laundry", status: "to do" },
-  ];
+  const items = useSelector((state) => state.list);
+  const [value, setValue] = useState("");
+  const dispatch = useDispatch();
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log(event.target);
+    dispatch(
+      addItem({
+        header: value,
+        status: "to do",
+      })
+    );
+  };
 
   return (
-    <ul style={{ listStyleType: "none" }}>
-      {items.map((item) => (
-        <ToDoItem id={item.id} header={item.header} status={item.status} />
-      ))}
-    </ul>
+    <div>
+      <ul style={{ listStyleType: "none" }}>
+        {items.map((item) => (
+          <ToDoListItem header={item.header} status={item.status} />
+        ))}
+      </ul>
+      <form onSubmit={onSubmit}>
+        <span>New To Do Item Header: </span>
+        <input
+          type="text"
+          placeholder="Add new to do item..."
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+        ></input>
+        <button type="submit">Add</button>
+      </form>
+    </div>
   );
 }

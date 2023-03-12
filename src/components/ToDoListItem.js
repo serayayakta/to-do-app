@@ -1,6 +1,10 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { removeItem } from "../features/list/listSlice";
 
-export default function ToDoItem({ id, header, status }) {
+export default function ToDoListItem({ header, status }) {
+  const dispatch = useDispatch();
+
   return (
     <li>
       <input type="checkbox" checked={status === "done"}></input>
@@ -16,7 +20,9 @@ export default function ToDoItem({ id, header, status }) {
           to do
         </option>
       </select>
-      <button>Remove</button>
+      <button onClick={() => dispatch(removeItem({ header: header }))}>
+        Remove
+      </button>
     </li>
   );
 }
