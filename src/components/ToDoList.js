@@ -9,7 +9,7 @@ export default function ToDoList() {
   const dispatch = useDispatch();
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target);
+
     dispatch(
       addItem({
         header: value,
